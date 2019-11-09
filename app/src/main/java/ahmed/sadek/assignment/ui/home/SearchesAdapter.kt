@@ -1,11 +1,14 @@
 package ahmed.sadek.assignment.ui.home
 
 import ahmed.sadek.assignment.GlideApp
+import ahmed.sadek.assignment.MainActivity
 import ahmed.sadek.assignment.R
 import ahmed.sadek.assignment.data.network.HitObj
+import ahmed.sadek.assignment.researcher.ResearcherActivity
 import ahmed.sadek.assignment.ui.home.researcher.ResearcherFragment
 import android.R.attr.fragment
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
@@ -43,12 +47,21 @@ class SearchesAdapter(internal var context: Context, searches: List<HitObj>) :
             .load(baseURL+hitObj._source!!.thumbnail)
             .into(holder.donation_project_image)
 
-       /* holder.constraintLayout.setOnClickListener {
-            val manager: FragmentManager = (context as AppCompatActivity).supportFragmentManager
+        holder.constraintLayout.setOnClickListener {
+            /*val manager: FragmentManager = (context as AppCompatActivity).supportFragmentManager
             val transaction: FragmentTransaction = manager.beginTransaction()
             transaction.add(R.id.container, ResearcherFragment())
-            transaction.commit()
-        }*/
+            transaction.commit()*/
+
+            val intent = Intent(context, ResearcherActivity::class.java)
+            // To pass any data to next activity
+            intent.putExtra("firstName", hitObj!!._source!!.studyPerson!!.firstName)
+            intent.putExtra("middleName", hitObj!!._source!!.studyPerson!!.middleInitials)
+            intent.putExtra("lastName", hitObj!!._source!!.studyPerson!!.lastName)
+            // start your next activity
+            startActivity(context,intent,null)
+
+        }
     }
 
     override fun getItemCount(): Int {

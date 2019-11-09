@@ -4,50 +4,104 @@ import ahmed.sadek.assignment.R
 import ahmed.sadek.assignment.data.network.HitObj
 import ahmed.sadek.assignment.data.network.SearchList
 import ahmed.sadek.assignment.databinding.FragmentSearchBinding
+import android.R.layout
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.AdapterView.OnItemClickListener
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jakewharton.rxbinding2.widget.textChanges
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_home.*
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_search.*
-import java.util.concurrent.TimeUnit
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import java.util.*
 
 
 class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel
 
-    val originalPosts= listOf<HitObj>() //SearchList.newlist
+    val originalPosts = listOf<HitObj>() //SearchList.newlist
     val filteredPosts: MutableList<HitObj> = mutableListOf()
     val oldFilteredPosts: MutableList<HitObj> = mutableListOf()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-        val binding:FragmentSearchBinding =  DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-
-
+        val binding: FragmentSearchBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       /* recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = context?.let { SimpleRecyclerAdapter(it, oldFilteredPosts) }*/
-       /* autoTextView
+
+        /* val adapter: List<String> = List<String>(extractList(SearchList.newlist).size,  R.layout.select_dialog_item,extractList(SearchList.newlist))
+        autoTextView.threshold = 1 //will start working from first character
+
+        autoTextView.setAdapter(adapter)
+
+        val selected = ArrayList<String>()
+        val llm = LinearLayoutManager(context)
+        llm.orientation = LinearLayoutManager.VERTICAL
+        List_Of_Selected_Researches.setLayoutManager(llm)
+
+        autoTextView.onItemClickListener =
+            OnItemClickListener { adapterView, view, i, l ->
+                val text = adapterView.getItemAtPosition(i).toString()
+                if (!selected.contains(text)) {
+                    for (eff in allEffectiveMatData) {
+                        if (eff.getName().toString().equals(text) or eff.getCommercialNames().contains(
+                                text
+                            )
+                        ) {
+                            if (!selected.contains(eff.getName())) {
+                                selected.add(eff.getName())
+                                autoTextView.setText("")
+                            }
+                        }
+                    }
+                }
+                val adapter =
+                    MedicationAdapter(getApplicationContext(), selected)
+                List_Of_Selected_Researches.setAdapter(adapter)
+            }
+
+    }
+
+    internal fun setSpinner(medications: List<*>?): List<String> {
+        val spinnerArrayAdapter: List<String> =
+            List<String?>(medications.size, layout.simple_spinner_item, medications)
+        spinnerArrayAdapter.setDropDownViewResource(layout.simple_spinner_dropdown_item) // The drop down view
+
+        return spinnerArrayAdapter
+    }
+
+    fun extractList(list:List<HitObj>):List<String>{
+        var stringList= listOf<String>()
+        for (i in list){
+            if(i._source!!.studyTitle.toString().contains("",true)){
+                stringList.toMutableList().add(i._source!!.studyTitle.toString())
+            }
+        }
+
+        return stringList
+    }*/
+
+
+        /* List_Of_Selected_Researches.layoutManager = LinearLayoutManager(context)
+        List_Of_Selected_Researches.adapter = context?.let { SimpleRecyclerAdapter(it, oldFilteredPosts) }
+        autoTextView
             .textChanges()
             .debounce(500, TimeUnit.MILLISECONDS)
             .subscribe {
@@ -58,12 +112,14 @@ class SearchFragment : Fragment() {
                         val diffResult = DiffUtil.calculateDiff(PostsDiffUtilCallback(oldFilteredPosts, filteredPosts))
                         oldFilteredPosts.clear()
                         oldFilteredPosts.addAll(filteredPosts)
-                        diffResult.dispatchUpdatesTo(recyclerView!!.adapter!!)
+                        diffResult.dispatchUpdatesTo(List_Of_Selected_Researches!!.adapter!!)
                     }
             }*/
     }
+}
 
-  /*  init {
+
+   /* init {
         oldFilteredPosts.addAll(originalPosts)
     }
 
@@ -87,4 +143,3 @@ class SearchFragment : Fragment() {
         }
         return false
     }*/
-}
