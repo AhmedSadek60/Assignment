@@ -8,7 +8,7 @@ import retrofit2.http.GET
 
 interface MyAPI {
 
-    @GET("search")
+    @GET("search?term=*&type=cgene")
     fun getSearhes() : Response<WikiSearchResponses>
 
    /* companion object{
